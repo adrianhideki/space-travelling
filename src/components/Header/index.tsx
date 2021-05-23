@@ -6,7 +6,9 @@ export default function Header(): React.ReactElement {
   return (
     <div className={styles.header}>
       <Link href="/">
-        <img src="/logo.svg" alt="logo" />
+        <a>
+          <img src="/logo.svg" alt="logo" />
+        </a>
       </Link>
     </div>
   );
