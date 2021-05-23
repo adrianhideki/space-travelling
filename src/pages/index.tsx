@@ -59,6 +59,12 @@ export default function Home({
             </Link>
           </div>
         ))}
+
+        {next_page && (
+          <button type="button" className={styles.carregarMaisPosts}>
+            Carregar mais posts
+          </button>
+        )}
       </main>
     </>
   );
@@ -70,7 +76,7 @@ export const getStaticProps: GetStaticProps = async () => {
     [Prismic.predicates.at('document.type', 'post')],
     {
       fetch: ['post.title', 'post.subtitle', 'post.author'],
-      pageSize: 20,
+      pageSize: 2,
       // page: 1,
     }
   );
