@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
@@ -34,16 +34,27 @@ interface HomeProps {
 export default function Home({
   postsPagination,
 }: HomeProps): React.ReactElement {
-  const { next_page, results } = postsPagination;
+  const [nextPage, setNextPage] = useState(postsPagination.next_page ?? '');
+  const [results, setResults] = useState(postsPagination.results ?? []);
+
+  const handleNextPage = async (nextPageLink: string): Promise<void> => {
+    const request = await fetch(nextPage)
+      .then(res => res.json())
+      .then(json => json);
+
+    setNextPage(request.next_page);
+    setResults([...results, ...request.results]);
+  };
+
   return (
     <>
       <Head>
-        <title> spacetravelling</title>
+        <title>spacetravelling</title>
       </Head>
       <main className={styles.container}>
         {results.map(post => (
-          <div className={styles.post}>
-            <Link href={`post/${post.uid}`}>
+          <div className={styles.post} key={post.uid}>
+            <Link href={`/post/${post.uid}`}>
               <a>
                 <strong>{post.data.title}</strong>
                 <p>{post.data.subtitle}</p>
@@ -60,8 +71,12 @@ export default function Home({
           </div>
         ))}
 
-        {next_page && (
-          <button type="button" className={styles.carregarMaisPosts}>
+        {nextPage && (
+          <button
+            onClick={() => handleNextPage(nextPage)}
+            type="button"
+            className={styles.carregarMaisPosts}
+          >
             Carregar mais posts
           </button>
         )}
@@ -76,8 +91,7 @@ export const getStaticProps: GetStaticProps = async () => {
     [Prismic.predicates.at('document.type', 'post')],
     {
       fetch: ['post.title', 'post.subtitle', 'post.author'],
-      pageSize: 2,
-      // page: 1,
+      pageSize: 20,
     }
   );
 
