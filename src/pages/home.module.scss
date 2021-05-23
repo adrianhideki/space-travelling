@@ -1,1 +1,24 @@
 // TODO
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.post {
+  margin: 2rem auto 0.125rem;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  strong {
+    font-size: 1.75rem;
+    color: var(--white-500);
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: var(--gray-500);
+    margin: 1rem 0 0.75rem 0;
+  }
+}

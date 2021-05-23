@@ -1,5 +1,10 @@
-import Prismic from '@prismicio/client';
+import React from 'react';
+import { FiCalendar, FiUser } from 'react-icons/fi';
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
+import Head from 'next/head';
+import Prismic from '@prismicio/client';
+
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -29,7 +34,34 @@ interface HomeProps {
 export default function Home({
   postsPagination,
 }: HomeProps): React.ReactElement {
-  return <>Hellow</>;
+  const { next_page, results } = postsPagination;
+  return (
+    <>
+      <Head>
+        <title> spacetravelling</title>
+      </Head>
+      <main className={styles.container}>
+        {results.map(post => (
+          <div className={styles.post}>
+            <Link href={`post/${post.uid}`}>
+              <a>
+                <strong>{post.data.title}</strong>
+                <p>{post.data.subtitle}</p>
+                <time className={commonStyles.iconText}>
+                  <FiCalendar />
+                  {post.first_publication_date}
+                </time>
+                <span className={commonStyles.iconText}>
+                  <FiUser />
+                  {post.data.author}
+                </span>
+              </a>
+            </Link>
+          </div>
+        ))}
+      </main>
+    </>
+  );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -59,12 +91,12 @@ export const getStaticProps: GetStaticProps = async () => {
     },
   }));
 
-  console.log(postsResponse);
-
   return {
     props: {
-      next_page: postsResponse.next_page,
-      results: posts,
+      postsPagination: {
+        next_page: postsResponse.next_page ?? null,
+        results: posts,
+      },
     },
   };
 };

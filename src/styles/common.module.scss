@@ -1,1 +1,14 @@
-// TODO
+.iconText {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+
+  svg {
+    width: 0.938rem;
+    height: 0.938rem;
+    margin-right: 0.0875rem;
+  }
+
+  & + .iconText {
+    padding-left: 1.25rem;
+  }
+}
