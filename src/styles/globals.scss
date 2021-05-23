@@ -5,3 +5,33 @@
 }
 
 // TODO
+:root {
+  --black-900: #1A1D23;
+  --white-500: #F8F8F8;
+  --gray-500: #D7D7D7;
+  --gray-600: #BBBBBB;
+  --pink-500: #FF57B2;
+}
+
+/*
+post-title: 1.75rem
+post-content: 1.125rem;
+author: 0.875rem;
+icon: 0.938rem;
+carregar-mais: 1.125rem;
+*/
+
+body {
+  background: var(--black-900);
+  color: var(--gray-500);
+}
+
+body, input, textarea, select, button {
+  font-family: "Inter", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
