@@ -43,7 +43,12 @@ export default function Post({ post }: PostProps): React.ReactElement {
     key: RichText.asText(postContent.heading).replace(' ', '-'),
   }));
 
-  const timeToRead = 1;
+  const timeToRead =
+    (content.reduce((sum, c) => {
+      return sum + c.textContent.split(' ').length;
+    }, 0) *
+      0.4) /
+    60;
 
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -74,7 +79,7 @@ export default function Post({ post }: PostProps): React.ReactElement {
           </span>
           <span className={commonStyles.iconText}>
             <FiClock />
-            {timeToRead} min
+            {timeToRead.toFixed()} min
           </span>
         </div>
         <div className={styles.content}>
