@@ -58,14 +58,16 @@ export default function Home({
               <a>
                 <strong>{post.data.title}</strong>
                 <p>{post.data.subtitle}</p>
-                <time className={commonStyles.iconText}>
-                  <FiCalendar />
-                  {post.first_publication_date}
-                </time>
-                <span className={commonStyles.iconText}>
-                  <FiUser />
-                  {post.data.author}
-                </span>
+                <div className={commonStyles.icons}>
+                  <time className={commonStyles.iconText}>
+                    <FiCalendar />
+                    {post.first_publication_date}
+                  </time>
+                  <span className={commonStyles.iconText}>
+                    <FiUser />
+                    {post.data.author}
+                  </span>
+                </div>
               </a>
             </Link>
           </div>
