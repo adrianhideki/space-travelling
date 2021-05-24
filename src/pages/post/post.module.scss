@@ -8,14 +8,12 @@
   }
 }
 
-.banner{
+.banner {
   width: 100%;
   height: 30rem;
   top: 0;
   object-fit: cover;
-
 }
-
 
 .icons {
   display: flex;
@@ -28,16 +26,21 @@
   font-size: 1.125rem;
   color: var(--gray-500);
 
-  h1, h2, h3, h4, h5, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h5 {
     color: var(--white-500);
     margin-bottom: 3rem;
   }
- }
+}
 
- .post {
-   margin-bottom: 3rem;
+.post {
+  margin-bottom: 3rem;
 
-   h1 {
+  h1 {
     font-size: 2.25rem;
   }
 
@@ -52,4 +55,49 @@
   a {
     color: var(--pink-500);
   }
- }
+}
+
+.section {
+  border-top: 1px solid var(--gray-500);
+  height: 1px;
+  width: 100%;
+  opacity: 0.1;
+}
+
+.otherPostsContent {
+  display: flex;
+  font-size: 1.125rem;
+  color: var(--white-500);
+  justify-content: space-between;
+  padding-top: 3rem;
+  margin-bottom: 3rem;
+
+  a {
+    color: var(--pink-500);
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+.rightPostLink{
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.leftPostLink {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.edited {
+  font-style: italic;
+  font-size: 0.875rem;
+  color: var(--gray-600);
+
+}

@@ -19,3 +19,24 @@
   display: flex;
   justify-content: flex-start;
 }
+
+.preview {
+  width: 100%;
+  background-color: var(--white-500);
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 3rem 0 3rem 0;
+
+  a {
+    font-weight: bold;
+    color: var(--black-900);
+    font-size: 1.125rem;
+  }
+
+  transition: filter 2s;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+}
