@@ -14,8 +14,10 @@ import styles from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
+  uid: string;
   data: {
     title: string;
+    subtitle: string;
     banner: {
       url: string;
     };
@@ -35,24 +37,30 @@ interface PostProps {
 
 export default function Post({ post }: PostProps): React.ReactElement {
   const router = useRouter();
-  const content = post.data.content.map(postContent => ({
-    htmlContent:
-      RichText.asHtml(postContent.heading) + RichText.asHtml(postContent.body),
-    textContent:
-      RichText.asText(postContent.heading) + RichText.asText(postContent.body),
-    key: RichText.asText(postContent.heading).replace(' ', '-'),
-  }));
-
-  const timeToRead =
-    (content.reduce((sum, c) => {
-      return sum + c.textContent.split(' ').length;
-    }, 0) *
-      0.4) /
-    60;
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return <div>Carregando...</div>;
   }
+
+  const { content } = post.data;
+
+  const htmlContent = content.reduce(
+    (html, itemContent) =>
+      html +
+      RichText.asHtml(itemContent.heading) +
+      RichText.asHtml(itemContent.body),
+    ''
+  );
+
+  const textContent = content.reduce(
+    (text, itemContent) =>
+      text +
+      RichText.asText(itemContent.heading) +
+      RichText.asText(itemContent.body),
+    ''
+  );
+
+  const timeToRead = (textContent.split(' ').length * 0.4) / 60;
 
   return (
     <>
@@ -71,7 +79,9 @@ export default function Post({ post }: PostProps): React.ReactElement {
         <div className={styles.icons}>
           <time className={commonStyles.iconText}>
             <FiCalendar />
-            {post.first_publication_date}
+            {format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+              locale: ptBR,
+            })}
           </time>
           <span className={commonStyles.iconText}>
             <FiUser />
@@ -83,13 +93,10 @@ export default function Post({ post }: PostProps): React.ReactElement {
           </span>
         </div>
         <div className={styles.content}>
-          {content.map(postContent => (
-            <div
-              key={postContent.key}
-              className={styles.post}
-              dangerouslySetInnerHTML={{ __html: postContent.htmlContent }}
-            />
-          ))}
+          <div
+            className={styles.post}
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
+          />
         </div>
       </main>
     </>
@@ -99,21 +106,18 @@ export default function Post({ post }: PostProps): React.ReactElement {
 export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient();
 
-  const posts = await prismic.query(
-    [Prismic.predicates.at('document.type', 'post')],
-    {
-      pageSize: 4,
-    }
+  const resp = prismic.query([Prismic.predicates.at('document.type', 'post')], {
+    pageSize: 20,
+  });
+
+  const slugs = resp.then(post =>
+    post.results.map(_post => ({ params: { slug: _post.uid } }))
   );
 
-  const slugs = posts.results.map(post => ({ params: { slug: post.uid } }));
-
   return {
-    paths: slugs,
+    paths: [...(await slugs.then(slug => slug))],
     fallback: true,
   };
-
-  // TODO
 };
 
 export const getStaticProps: GetStaticProps = async context => {
@@ -123,15 +127,11 @@ export const getStaticProps: GetStaticProps = async context => {
   const response = await prismic.getByUID('post', String(slug), {});
 
   const post = {
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd MMM yyyy',
-      {
-        locale: ptBR,
-      }
-    ),
+    first_publication_date: response.first_publication_date,
+    uid: response.uid,
     data: {
       title: response.data.title,
+      subtitle: response.data.subtitle,
       banner: {
         url: response.data.banner.url,
       },

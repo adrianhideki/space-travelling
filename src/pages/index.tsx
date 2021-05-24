@@ -61,7 +61,13 @@ export default function Home({
                 <div className={commonStyles.icons}>
                   <time className={commonStyles.iconText}>
                     <FiCalendar />
-                    {post.first_publication_date}
+                    {format(
+                      new Date(post.first_publication_date),
+                      'dd MMM yyyy',
+                      {
+                        locale: ptBR,
+                      }
+                    )}
                   </time>
                   <span className={commonStyles.iconText}>
                     <FiUser />
@@ -99,13 +105,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const posts = postsResponse.results.map(p => ({
     uid: p.uid,
-    first_publication_date: format(
-      new Date(p.first_publication_date),
-      'dd MMM yyyy',
-      {
-        locale: ptBR,
-      }
-    ),
+    first_publication_date: p.first_publication_date,
     data: {
       title: p.data.title,
       subtitle: p.data.subtitle,
