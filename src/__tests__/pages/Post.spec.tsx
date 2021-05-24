@@ -213,7 +213,6 @@ describe('Post', () => {
       getStaticPathsContext
     )) as GetStaticPathsResult;
 
-    console.log(getStaticPathsReturn, response.paths);
     expect(response.paths).toEqual(getStaticPathsReturn);
   });
 

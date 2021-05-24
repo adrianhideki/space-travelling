@@ -25,6 +25,7 @@ interface Post {
     content: {
       heading: string;
       body: {
+        type: string;
         text: string;
       }[];
     }[];
@@ -44,19 +45,16 @@ export default function Post({ post }: PostProps): React.ReactElement {
 
   const { content } = post.data;
 
-  const htmlContent = content.reduce(
-    (html, itemContent) =>
-      html +
-      RichText.asHtml(itemContent.heading) +
-      RichText.asHtml(itemContent.body),
-    ''
-  );
+  const htmlContent = content.reduce((html, itemContent) => {
+    const bodyContent = RichText.asHtml(itemContent.body);
+    const headingContent = `<h1>${itemContent.heading}</h1>`;
+
+    return `${html}${headingContent}${bodyContent}`;
+  }, '');
 
   const textContent = content.reduce(
     (text, itemContent) =>
-      text +
-      RichText.asText(itemContent.heading) +
-      RichText.asText(itemContent.body),
+      text + itemContent.heading + RichText.asText(itemContent.body),
     ''
   );
 
@@ -136,7 +134,10 @@ export const getStaticProps: GetStaticProps = async context => {
         url: response.data.banner.url,
       },
       author: response.data.author,
-      content: response.data.content,
+      content: response.data.content.map(content => ({
+        heading: content.heading,
+        body: content.body,
+      })),
     },
   };
 
